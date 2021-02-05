@@ -1,0 +1,21 @@
+#!/bin/sh
+cat <<EOF>/etc/stunnel.conf
+setuid = stunnel
+setgid = stunnel
+pid = /tmp/stunnel.pid
+sslVersion = all
+options = NO_SSLv2
+foreground = yes
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+verify = 0
+client = yes
+ciphers = ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4
+[redis]
+accept = ${ACCEPT}
+connect = ${CONNECT}
+delay = yes
+retry = yes
+EOF
+
+exec /usr/bin/stunnel /etc/stunnel.conf
